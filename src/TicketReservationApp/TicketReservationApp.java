@@ -1,0 +1,96 @@
+package TicketReservationApp;
+/*
+Project: Bilet Rezervasyon ve Bilet Fiyatı Hesaplama Uygulaması
+
+    1- Uygulama mesafe ve kurallara göre otobüs bileti fiyatı hesaplar sonuç olarak bilet bilgisini verir
+    2- Kullanıcıdan     mesafe (KM),
+                        yolcu adı, yaşı ,
+                        yolculuk tipi (Tek Yön, Gidiş-Dönüş)
+                        ve koltuk no bilgilerini alınır.
+             NOT: Koltuk numaraları her otobüs için dinamik olmalıdır.)
+                  Kullanıcıdan alınan değerler geçerli (mesafe ve yaş değerleri pozitif sayı, yolculuk tipi ise 1 veya 2) olmalıdır.
+                  Aksi halde kullanıcıya "Hatalı Veri Girdiniz !" şeklinde bir uyarı verilmelidir.
+
+    3-Fiyat hesaplama kuralları:
+       -Mesafe başına ücret:
+                  Tek yön: 1 Lira / km       Çift Yön(Gidiş-Dönüş): 2 Lira/km
+       -Tekli Koltuk ücreti:
+                  Koltuk no 3 veya 3 ün katı ise fiyat %20 daha fazladır(Tek yön: 1.2 Lira/km, Çift Yön:2.4 Lira/km).
+       -İlk olarak seferin mesafe, yön ve koltuk no bilgisine göre fiyatı hesaplanır,
+        sonrasında koşullara göre aşağıdaki indirimler uygulanır ;
+                   i)-Çift Yön indirimi:
+                               "Yolculuk Tipi" gidiş dönüş seçilmiş ise son bilet fiyatı üzerinden %20 indirim uygulanır.
+                   ii)-Yaş indirimi:
+                                Kişi 12 yaşından küçükse son bilet fiyatı üzerinden %50 indirim uygulanır.
+                                Kişi 65 yaşından büyük ise son bilet fiyatı üzerinden %30 indirim uygulanır.
+
+ */
+
+
+import java.sql.SQLOutput;
+import java.util.Scanner;
+import java.util.zip.ZipFile;
+
+public class TicketReservationApp {
+    public static void main(String[] args) {
+        start();
+
+    }
+    private static void start() {
+
+        //1-bilet ve otobüs objelerini oluşturalım.
+        Bus bus = new Bus("34 TPE 789", 33);
+
+        Ticket ticket;
+        Scanner scanner = new Scanner(System.in);
+        int select;// ÇIKIŞ için 0 ı seçiniz.
+
+        do {
+            //kullanıcıdan bilgileri alalım
+            System.out.println("Bilet Rezervasyon Sistemine Hoşgeldiniz:)");
+            System.out.println("Lütfen ad-soyad giriniz:");
+            String name = scanner.nextLine();
+
+            System.out.println("Lütfen yaşınızı giriniz:");
+            int age = scanner.nextInt();//\n
+
+
+            System.out.println("Lütfen gidilecek mesafeyi (KM) giriniz:");
+            double km = scanner.nextDouble();
+
+            System.out.println("Yolculuk tipini seçiniz :");
+            System.out.println("1-Tek Yön");
+            System.out.println("2-Gidiş-Dönüş");
+            int type = scanner.nextInt();//\n
+            scanner.nextLine();//dummy object kullanıyoruz. Üstteki nextint den sonra nextline kullanırsak bu scanner koşulu bildirelim aksi halde nextline görmüyor.
+
+            System.out.println("Lütfen koltuk no giriniz:");
+            System.out.println("Tekli koltuk ücretleri %20 daha fazladır!");
+            System.out.println(bus.getSeats());//1,,3,.......33
+            String seat = scanner.next();
+
+
+            //koltuk no rezerve edilmiş mi veya listede var mı
+            boolean isReserved = !bus.getSeats().contains(seat);//contains false döndürüyor..listede 2 numara yoksa isreserved=true oluyor fakat isreserved değilse !False=true olunca koşul çalışmalı ki ..
+            //true is rezerve edilmiş veya bu koltuk otobüste yok demektir.
+
+            //girilen değerler geçerli mi
+            if (km > 0 && age > 0 && (type == 1 || type == 2) && !isReserved) {
+                //todo : bileti hazırla .... devamı gelecek.//
+            } else {
+                if (isReserved) {
+                    System.out.println("Seçilen koltuk mevcut değil veya rezerve edilmiştir!");
+                } else {
+                    System.out.println("Sayın " + name + "hatalı veri girdiniz!");
+                }
+            }
+            System.out.println("Yeni işlem için bir sayı giriniz, ÇIKIŞ için 0 giriniz:");
+            select = scanner.nextInt();//1-0
+            scanner.nextLine();
+
+        } while (select != 0);
+        System.out.println("yi günler dileriz, yine bekleriz...");
+
+
+    }
+}
