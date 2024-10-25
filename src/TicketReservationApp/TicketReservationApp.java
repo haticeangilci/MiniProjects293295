@@ -53,7 +53,7 @@ public class TicketReservationApp {
 
             System.out.println("Lütfen yaşınızı giriniz:");
             int age = scanner.nextInt();//\n
-
+            scanner.nextLine();
 
             System.out.println("Lütfen gidilecek mesafeyi (KM) giriniz:");
             double km = scanner.nextDouble();
@@ -76,7 +76,19 @@ public class TicketReservationApp {
 
             //girilen değerler geçerli mi
             if (km > 0 && age > 0 && (type == 1 || type == 2) && !isReserved) {
-                //todo : bileti hazırla .... devamı gelecek.//
+               //bileti hazırlayalım.
+                ticket = new Ticket(km,type,seat,bus);
+                ticket.setPrice(age);
+
+                //rezerve edilen koltuğu listeden kaldıralım.
+                ticket.getBus().getSeats().remove(seat);
+
+                //bileti yazdıralım.
+                ticket.printTicket(name);
+
+
+
+
             } else {
                 if (isReserved) {
                     System.out.println("Seçilen koltuk mevcut değil veya rezerve edilmiştir!");
@@ -89,7 +101,7 @@ public class TicketReservationApp {
             scanner.nextLine();
 
         } while (select != 0);
-        System.out.println("yi günler dileriz, yine bekleriz...");
+        System.out.println("İyi günler dileriz, yine bekleriz...");
 
 
     }
